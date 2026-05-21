@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "common"
+version = "0.1.0"
+description = "Shared utilities for AllInOne microservices"
+authors = ["Developer <developer@example.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.13"
+pydantic = "^2.7.0"
+pydantic-settings = "^2.2.0"
+python-jose = "^3.3.0"
+passlib = "^1.7.4"
+bcrypt = "^4.1.2"
+redis = "^5.0.1"
+aiokafka = "^0.8.0"
+sqlalchemy = "^2.0.30"
+asyncpg = "^0.29.0"
+fastapi = "^0.115.0"
+nacos-sdk-python = "^0.3.0"
+kazoo = "^2.8.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
