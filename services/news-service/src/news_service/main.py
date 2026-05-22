@@ -51,7 +51,9 @@ async def startup():
     
     service_registry = NacosServiceRegistry(
         server_addresses=settings.nacos_server_addresses,
-        namespace=settings.nacos_namespace
+        namespace=settings.nacos_namespace,
+        username=settings.nacos_username,
+        password=settings.nacos_password
     )
     await service_registry.init()
     await service_registry.register_service(

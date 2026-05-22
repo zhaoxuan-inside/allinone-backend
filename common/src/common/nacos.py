@@ -3,17 +3,25 @@ import socket
 
 
 class NacosServiceRegistry:
-    def __init__(self, server_addresses: str, namespace: str = "public"):
+    def __init__(self, server_addresses: str, namespace: str = "public", username: str = None, password: str = None):
         self.server_addresses = server_addresses
         self.namespace = namespace
+        self.username = username
+        self.password = password
         self.client = None
 
     async def init(self):
-        self.client = NacosClient(
-            server_addresses=self.server_addresses,
-            namespace=self.namespace,
-            async_req=True
-        )
+        client_args = {
+            "server_addresses": self.server_addresses,
+            "namespace": self.namespace,
+            "async_req": True
+        }
+        
+        if self.username and self.password:
+            client_args["username"] = self.username
+            client_args["password"] = self.password
+        
+        self.client = NacosClient(**client_args)
         await self.client.init()
 
     async def register_service(self, service_name: str, ip: str = None, port: int = 8000):

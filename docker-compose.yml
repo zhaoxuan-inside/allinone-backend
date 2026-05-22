@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   postgres:
-    image: postgres:16-alpine
+    image: postgres:16
     container_name: allinone-postgres
     environment:
       POSTGRES_USER: allinone
@@ -19,7 +19,7 @@ services:
       retries: 3
 
   redis:
-    image: redis:7-alpine
+    image: redis:7
     container_name: allinone-redis
     ports:
       - "6379:6379"
@@ -94,7 +94,7 @@ services:
       retries: 3
 
   mongodb:
-    image: mongo:6.0
+    image: mongodb/mongodb-community-server:latest
     container_name: allinone-mongodb
     ports:
       - "27017:27017"
@@ -111,8 +111,8 @@ services:
 
   api-gateway:
     build:
-      context: ./services/api-gateway
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: services/api-gateway/Dockerfile
     container_name: allinone-api-gateway
     ports:
       - "8000:8000"
@@ -131,8 +131,8 @@ services:
 
   auth-service:
     build:
-      context: ./services/auth-service
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: services/auth-service/Dockerfile
     container_name: allinone-auth-service
     ports:
       - "8008:8008"
@@ -153,8 +153,8 @@ services:
 
   user-service:
     build:
-      context: ./services/user-service
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: services/user-service/Dockerfile
     container_name: allinone-user-service
     ports:
       - "8001:8001"
@@ -172,8 +172,8 @@ services:
 
   news-service:
     build:
-      context: ./services/news-service
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: services/news-service/Dockerfile
     container_name: allinone-news-service
     ports:
       - "8002:8002"
@@ -195,8 +195,8 @@ services:
 
   tools-service:
     build:
-      context: ./services/tools-service
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: services/tools-service/Dockerfile
     container_name: allinone-tools-service
     ports:
       - "8003:8003"
@@ -212,8 +212,8 @@ services:
 
   ai-service:
     build:
-      context: ./services/ai-service
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: services/ai-service/Dockerfile
     container_name: allinone-ai-service
     ports:
       - "8004:8004"
@@ -229,8 +229,8 @@ services:
 
   stocks-service:
     build:
-      context: ./services/stocks-service
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: services/stocks-service/Dockerfile
     container_name: allinone-stocks-service
     ports:
       - "8005:8005"
@@ -246,8 +246,8 @@ services:
 
   forum-service:
     build:
-      context: ./services/forum-service
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: services/forum-service/Dockerfile
     container_name: allinone-forum-service
     ports:
       - "8006:8006"
@@ -269,8 +269,8 @@ services:
 
   system-service:
     build:
-      context: ./services/system-service
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: services/system-service/Dockerfile
     container_name: allinone-system-service
     ports:
       - "8007:8007"

@@ -120,7 +120,9 @@ async def startup():
     # 初始化服务发现
     service_discovery = NacosServiceDiscovery(
         server_addresses=settings.nacos_server_addresses,
-        namespace=settings.nacos_namespace
+        namespace=settings.nacos_namespace,
+        username=settings.nacos_username,
+        password=settings.nacos_password
     )
     await service_discovery.init()
     
