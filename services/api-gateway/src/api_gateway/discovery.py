@@ -1,7 +1,19 @@
 import asyncio
 import random
 from typing import List, Optional, Dict
-from nacos import NacosClient
+
+try:
+    from v2.nacos.naming.nacos_naming_service import NacosNamingService
+    from v2.nacos.common.client_config import ClientConfig
+    from v2.nacos.naming.model.naming_param import ListInstanceParam
+    NEW_API = True
+except ImportError:
+    try:
+        from nacos import NacosClient
+        NEW_API = False
+    except ImportError:
+        from nacos.client import NacosClient
+        NEW_API = False
 
 
 class ServiceInstance:
@@ -70,18 +82,27 @@ class NacosServiceDiscovery:
         self._update_interval = 30
 
     async def init(self):
-        client_args = {
-            "server_addresses": self.server_addresses,
-            "namespace": self.namespace,
-            "async_req": True
-        }
-        
-        if self.username and self.password:
-            client_args["username"] = self.username
-            client_args["password"] = self.password
-        
-        self.client = NacosClient(**client_args)
-        await self.client.init()
+        if NEW_API:
+            client_config = ClientConfig(
+                server_addresses=self.server_addresses,
+                namespace_id=self.namespace,
+                username=self.username,
+                password=self.password
+            )
+            self.client = await NacosNamingService.create_naming_service(client_config)
+        else:
+            client_args = {
+                "server_addresses": self.server_addresses,
+                "namespace": self.namespace,
+                "async_req": True
+            }
+            
+            if self.username and self.password:
+                client_args["username"] = self.username
+                client_args["password"] = self.password
+            
+            self.client = NacosClient(**client_args)
+            await self.client.init()
         asyncio.create_task(self._periodic_update())
 
     async def _periodic_update(self):
@@ -90,22 +111,42 @@ class NacosServiceDiscovery:
             await asyncio.sleep(self._update_interval)
 
     async def update_all_services(self):
-        services = await self.client.list_naming_services()
-        for service_name in services:
-            await self.update_service(service_name)
+        if NEW_API:
+            pass
+        else:
+            services = await self.client.list_naming_services()
+            for service_name in services:
+                await self.update_service(service_name)
 
     async def update_service(self, service_name: str):
         try:
-            result = await self.client.list_naming_instances(service_name)
-            instances = []
-            for instance in result.get("hosts", []):
-                instances.append(ServiceInstance(
-                    ip=instance.get("ip"),
-                    port=instance.get("port"),
-                    weight=instance.get("weight", 1.0),
-                    healthy=instance.get("healthy", False)
-                ))
-            self._instance_cache[service_name] = instances
+            if NEW_API:
+                request = ListInstanceParam(
+                    service_name=service_name,
+                    subscribe=True,
+                    healthy_only=True
+                )
+                instances = await self.client.list_instances(request)
+                service_instances = []
+                for instance in instances:
+                    service_instances.append(ServiceInstance(
+                        ip=instance.ip,
+                        port=instance.port,
+                        weight=instance.weight,
+                        healthy=instance.healthy
+                    ))
+                self._instance_cache[service_name] = service_instances
+            else:
+                result = await self.client.list_naming_instances(service_name)
+                instances = []
+                for instance in result.get("hosts", []):
+                    instances.append(ServiceInstance(
+                        ip=instance.get("ip"),
+                        port=instance.get("port"),
+                        weight=instance.get("weight", 1.0),
+                        healthy=instance.get("healthy", False)
+                    ))
+                self._instance_cache[service_name] = instances
         except Exception as e:
             print(f"Failed to update service {service_name}: {e}")
 

@@ -10,6 +10,49 @@ from jose import JWTError, jwt
 from common.settings import settings
 
 
+def decode_token(token: str) -> Optional[Dict[str, Any]]:
+    try:
+        secret_key = settings.jwt_secret_key
+        payload = jwt.decode(token, secret_key, algorithms=["HS256"])
+        return payload
+    except JWTError:
+        return None
+
+
+def create_access_token(data: Dict[str, Any], expires_delta: Optional[timedelta] = None) -> str:
+    to_encode = data.copy()
+    if expires_delta:
+        expire = datetime.utcnow() + expires_delta
+    else:
+        expire = datetime.utcnow() + timedelta(minutes=15)
+    to_encode.update({"exp": expire, "jti": str(uuid.uuid4()), "type": "access"})
+    encoded_jwt = jwt.encode(to_encode, settings.jwt_secret_key, algorithm="HS256")
+    return encoded_jwt
+
+
+def create_refresh_token(data: Dict[str, Any], expires_delta: Optional[timedelta] = None) -> str:
+    to_encode = data.copy()
+    if expires_delta:
+        expire = datetime.utcnow() + expires_delta
+    else:
+        expire = datetime.utcnow() + timedelta(days=7)
+    to_encode.update({"exp": expire, "jti": str(uuid.uuid4()), "type": "refresh"})
+    encoded_jwt = jwt.encode(to_encode, settings.jwt_secret_key, algorithm="HS256")
+    return encoded_jwt
+
+
+def get_password_hash(password: str) -> str:
+    from passlib.context import CryptContext
+    pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+    return pwd_context.hash(password)
+
+
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    from passlib.context import CryptContext
+    pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+    return pwd_context.verify(plain_password, hashed_password)
+
+
 class AuthProvider(ABC):
     @abstractmethod
     async def authenticate(self, credentials: Dict[str, Any]) -> Optional[Dict[str, Any]]:
@@ -251,6 +294,23 @@ class RequestHeaders:
     FORWARDED_FOR = "X-Forwarded-For"
     REAL_IP = "X-Real-IP"
     GATEWAY_VERSION = "X-Gateway-Version"
+
+
+async def get_current_user(request: "Request") -> Dict[str, Any]:
+    from fastapi import HTTPException, Request
+    
+    user_id = request.headers.get("X-User-Id")
+    if not user_id:
+        raise HTTPException(status_code=401, detail="Unauthorized")
+    
+    roles = request.headers.get("X-User-Roles", "")
+    permissions = request.headers.get("X-User-Permissions", "")
+    
+    return {
+        "user_id": user_id,
+        "roles": roles.split(",") if roles else [],
+        "permissions": permissions.split(",") if permissions else []
+    }
 
 
 class AuthHandler:

@@ -4,9 +4,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from common.auth import create_access_token, create_refresh_token, get_password_hash, verify_password
 from common.exceptions import ConflictException, NotFoundException, UnauthorizedException
-from user_service.entities import User
-from user_service.repository import UserRepository
-from user_service.schemas import LoginRequest, TokenResponse, UserCreate, UserResponse, UserUpdate, UserPublicProfile, CurrentUserResponse
+from src.user_service.entities import User
+from src.user_service.repository import UserRepository
+from src.user_service.schemas import LoginRequest, TokenResponse, UserCreate, UserResponse, UserUpdate, UserPublicProfile, CurrentUserResponse
 
 
 class UserService:

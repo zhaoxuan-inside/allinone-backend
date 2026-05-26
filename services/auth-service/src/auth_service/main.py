@@ -8,8 +8,8 @@ from common.config_center import ConfigCenter
 from common.logger import UnifiedLogger, LogConfig, LogLevel
 from common.nacos import NacosServiceRegistry
 
-from auth_service.service import AuthService
-from auth_service.router import router as auth_router, set_auth_service
+from src.auth_service.service import AuthService
+from src.auth_service.router import router as auth_router, set_auth_service
 
 app = FastAPI(
     title="Auth Service",

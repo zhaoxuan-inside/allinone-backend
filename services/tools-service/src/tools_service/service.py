@@ -4,9 +4,9 @@ import time
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from tools_service.entities import Tool
-from tools_service.repository import ToolRepository, ToolCategoryRepository, ToolUsageLogRepository
-from tools_service.schemas import (
+from src.tools_service.entities import Tool
+from src.tools_service.repository import ToolRepository, ToolCategoryRepository, ToolUsageLogRepository
+from src.tools_service.schemas import (
     Tool as ToolSchema,
     ToolSummary,
     ToolCategory as ToolCategorySchema,

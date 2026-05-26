@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from common.auth import get_current_user
 from common.database import get_db
 from common.permissions import Roles, require_role, require_permission
-from news_service.schemas import (
+from src.news_service.schemas import (
     NewsSummary,
     NewsDetail,
     Comment,
@@ -15,7 +15,7 @@ from news_service.schemas import (
     NewsCrawlerConfig,
     NewsCrawlerConfigCreate
 )
-from news_service.service import NewsService
+from src.news_service.service import NewsService
 
 router = APIRouter(prefix="/news", tags=["news"])
 

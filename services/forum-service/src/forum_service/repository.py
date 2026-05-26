@@ -4,7 +4,7 @@ from uuid import UUID
 from sqlalchemy import select, update, insert, delete, desc
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from forum_service.entities import Post, Comment, PostLike, CommentLike
+from src.forum_service.entities import Post, Comment, PostLike, CommentLike
 
 
 class PostRepository:

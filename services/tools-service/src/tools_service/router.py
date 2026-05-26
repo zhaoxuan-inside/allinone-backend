@@ -6,12 +6,12 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from common.database import get_db
 from common.permissions import Roles, require_role
-from tools_service.schemas import (
+from src.tools_service.schemas import (
     Tool, ToolCreate, ToolUpdate,
     ToolListResponse, ToolDetailResponse,
     ToolCategory, ToolExecutionRequest, ToolExecutionResponse
 )
-from tools_service.service import ToolService
+from src.tools_service.service import ToolService
 
 router = APIRouter(prefix="/tools", tags=["tools"])
 

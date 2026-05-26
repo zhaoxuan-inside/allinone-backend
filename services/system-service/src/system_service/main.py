@@ -6,7 +6,7 @@ from common.config_center import ConfigCenter
 from common.database import create_engine, create_session_maker, get_db
 from common.logger import UnifiedLogger, LogConfig, LogLevel
 from common.nacos import NacosServiceRegistry
-from system_service.router import router as system_router
+from src.system_service.router import router as system_router
 
 app = FastAPI(
     title="System Service",
@@ -46,8 +46,7 @@ async def startup():
         await settings.load_from_config_center(config_center)
     
     engine = create_engine(settings.database_url)
-    session_maker = create_session_maker(engine)
-    app.dependency_overrides[get_db] = lambda: get_db(session_maker)
+    create_session_maker(engine)
     
     service_registry = NacosServiceRegistry(
         server_addresses=settings.nacos_server_addresses,
@@ -79,6 +78,9 @@ async def shutdown():
 @app.get("/")
 async def root():
     return {"message": "System Service"}
+
+
+app.include_router(system_router)
 
 
 @app.exception_handler(HTTPException)

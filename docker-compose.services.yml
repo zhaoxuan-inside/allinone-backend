@@ -1,0 +1,218 @@
+services:
+  api-gateway:
+    build:
+      context: .
+      dockerfile: services/api-gateway/Dockerfile
+    container_name: allinone-api-gateway
+    ports:
+      - "8000:8000"
+    depends_on:
+      - nacos
+      - redis
+    environment:
+      - PYTHONPATH=/app
+      - NACOS_SERVER_ADDRESSES=nacos:8848
+      - NACOS_NAMESPACE=public
+      - REDIS_HOST=redis
+      - REDIS_PASSWORD=iPasswd1234
+    networks:
+      - default
+
+  auth-service:
+    build:
+      context: .
+      dockerfile: services/auth-service/Dockerfile
+    container_name: allinone-auth-service
+    ports:
+      - "8008:8008"
+    depends_on:
+      - nacos
+      - redis
+      - postgres
+    environment:
+      - PYTHONPATH=/app
+      - NACOS_SERVER_ADDRESSES=nacos:8848
+      - NACOS_NAMESPACE=public
+      - REDIS_HOST=redis
+      - REDIS_PASSWORD=iPasswd1234
+      - POSTGRES_HOST=postgres
+      - POSTGRES_USER=allinone
+      - POSTGRES_PASSWORD=iPasswd1234
+    networks:
+      - default
+
+  user-service:
+    build:
+      context: .
+      dockerfile: services/user-service/Dockerfile
+    container_name: allinone-user-service
+    ports:
+      - "8001:8001"
+    depends_on:
+      - nacos
+      - postgres
+      - redis
+      - kafka
+    environment:
+      - PYTHONPATH=/app
+      - NACOS_SERVER_ADDRESSES=nacos:8848
+      - NACOS_NAMESPACE=public
+      - POSTGRES_HOST=postgres
+      - POSTGRES_USER=allinone
+      - POSTGRES_PASSWORD=iPasswd1234
+      - REDIS_HOST=redis
+      - REDIS_PASSWORD=iPasswd1234
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+    networks:
+      - default
+
+  news-service:
+    build:
+      context: .
+      dockerfile: services/news-service/Dockerfile
+    container_name: allinone-news-service
+    ports:
+      - "8002:8002"
+    depends_on:
+      - nacos
+      - postgres
+      - redis
+      - elasticsearch
+      - mongodb
+    environment:
+      - PYTHONPATH=/app
+      - NACOS_SERVER_ADDRESSES=nacos:8848
+      - NACOS_NAMESPACE=public
+      - POSTGRES_HOST=postgres
+      - POSTGRES_USER=allinone
+      - POSTGRES_PASSWORD=iPasswd1234
+      - REDIS_HOST=redis
+      - REDIS_PASSWORD=iPasswd1234
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+      - ELASTICSEARCH_USER=elastic
+      - ELASTICSEARCH_PASSWORD=iPasswd1234
+      - MONGODB_URI=mongodb://allinone:iPasswd1234@mongodb:27017/
+    networks:
+      - default
+
+  tools-service:
+    build:
+      context: .
+      dockerfile: services/tools-service/Dockerfile
+    container_name: allinone-tools-service
+    ports:
+      - "8003:8003"
+    depends_on:
+      - nacos
+      - postgres
+      - redis
+    environment:
+      - PYTHONPATH=/app
+      - NACOS_SERVER_ADDRESSES=nacos:8848
+      - NACOS_NAMESPACE=public
+      - POSTGRES_HOST=postgres
+      - POSTGRES_USER=allinone
+      - POSTGRES_PASSWORD=iPasswd1234
+      - REDIS_HOST=redis
+      - REDIS_PASSWORD=iPasswd1234
+    networks:
+      - default
+
+  ai-service:
+    build:
+      context: .
+      dockerfile: services/ai-service/Dockerfile
+    container_name: allinone-ai-service
+    ports:
+      - "8004:8004"
+    depends_on:
+      - nacos
+      - postgres
+      - redis
+    environment:
+      - PYTHONPATH=/app
+      - NACOS_SERVER_ADDRESSES=nacos:8848
+      - NACOS_NAMESPACE=public
+      - POSTGRES_HOST=postgres
+      - POSTGRES_USER=allinone
+      - POSTGRES_PASSWORD=iPasswd1234
+      - REDIS_HOST=redis
+      - REDIS_PASSWORD=iPasswd1234
+    networks:
+      - default
+
+  stocks-service:
+    build:
+      context: .
+      dockerfile: services/stocks-service/Dockerfile
+    container_name: allinone-stocks-service
+    ports:
+      - "8005:8005"
+    depends_on:
+      - nacos
+      - postgres
+      - redis
+    environment:
+      - PYTHONPATH=/app
+      - NACOS_SERVER_ADDRESSES=nacos:8848
+      - NACOS_NAMESPACE=public
+      - POSTGRES_HOST=postgres
+      - POSTGRES_USER=allinone
+      - POSTGRES_PASSWORD=iPasswd1234
+      - REDIS_HOST=redis
+      - REDIS_PASSWORD=iPasswd1234
+    networks:
+      - default
+
+  forum-service:
+    build:
+      context: .
+      dockerfile: services/forum-service/Dockerfile
+    container_name: allinone-forum-service
+    ports:
+      - "8006:8006"
+    depends_on:
+      - nacos
+      - postgres
+      - redis
+      - elasticsearch
+      - mongodb
+    environment:
+      - PYTHONPATH=/app
+      - NACOS_SERVER_ADDRESSES=nacos:8848
+      - NACOS_NAMESPACE=public
+      - POSTGRES_HOST=postgres
+      - POSTGRES_USER=allinone
+      - POSTGRES_PASSWORD=iPasswd1234
+      - REDIS_HOST=redis
+      - REDIS_PASSWORD=iPasswd1234
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+      - ELASTICSEARCH_USER=elastic
+      - ELASTICSEARCH_PASSWORD=iPasswd1234
+      - MONGODB_URI=mongodb://allinone:iPasswd1234@mongodb:27017/
+    networks:
+      - default
+
+  system-service:
+    build:
+      context: .
+      dockerfile: services/system-service/Dockerfile
+    container_name: allinone-system-service
+    ports:
+      - "8007:8007"
+    depends_on:
+      - nacos
+      - postgres
+      - redis
+    environment:
+      - PYTHONPATH=/app
+      - NACOS_SERVER_ADDRESSES=nacos:8848
+      - NACOS_NAMESPACE=public
+      - POSTGRES_HOST=postgres
+      - POSTGRES_USER=allinone
+      - POSTGRES_PASSWORD=iPasswd1234
+      - REDIS_HOST=redis
+      - REDIS_PASSWORD=iPasswd1234
+    networks:
+      - default
+

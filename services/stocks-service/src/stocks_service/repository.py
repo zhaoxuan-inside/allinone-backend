@@ -5,7 +5,7 @@ from datetime import datetime
 from sqlalchemy import select, update, desc, and_
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from stocks_service.entities import StockStrategy, TradeSignal, StockKLine, StockInfo, StrategyPerformance
+from src.stocks_service.entities import StockStrategy, TradeSignal, StockKLine, StockInfo, StrategyPerformance
 
 
 class StrategyRepository:

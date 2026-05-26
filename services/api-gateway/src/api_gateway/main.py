@@ -12,7 +12,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from common import settings
 from common.auth import AuthHandler, AuthResult, RequestHeaders
-from common.discovery import NacosServiceDiscovery, RoundRobinBalancer
+from src.api_gateway.discovery import NacosServiceDiscovery, RoundRobinBalancer
 from common.logger import LogConfig, LogLevel, UnifiedLogger
 from common.ratelimit import (
     CircuitBreakerConfig,

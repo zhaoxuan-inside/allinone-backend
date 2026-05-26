@@ -4,7 +4,7 @@ from uuid import UUID
 from sqlalchemy import select, update, func
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from tools_service.entities import Tool, ToolCategory, ToolUsageLog
+from src.tools_service.entities import Tool, ToolCategory, ToolUsageLog
 
 
 class ToolRepository:

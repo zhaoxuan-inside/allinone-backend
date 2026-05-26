@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   postgres:
     image: postgres:16
@@ -33,16 +31,17 @@ services:
       retries: 3
 
   zookeeper:
-    image: confluentinc/cp-zookeeper:7.4.0
+    image: zookeeper:3.8
     container_name: allinone-zookeeper
     environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
-      ZOOKEEPER_TICK_TIME: 2000
+      ZOO_MY_ID: 1
+      ZOO_PORT: 2181
+      ZOO_SERVERS: server.1=zookeeper:2888:3888
     ports:
       - "2181:2181"
 
   kafka:
-    image: confluentinc/cp-kafka:7.4.0
+    image: wurstmeister/kafka:2.13-2.8.1
     container_name: allinone-kafka
     depends_on:
       - zookeeper
@@ -52,9 +51,8 @@ services:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
-      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
 
   nacos:
     image: nacos/nacos-server:v2.3.2
@@ -64,10 +62,7 @@ services:
       - "9848:9848"
     environment:
       MODE: standalone
-      NACOS_AUTH_ENABLE: "true"
-      NACOS_AUTH_IDENTITY_KEY: allinone
-      NACOS_AUTH_IDENTITY_VALUE: iPasswd1234
-      NACOS_AUTH_TOKEN: iPasswd1234
+      NACOS_AUTH_ENABLE: "false"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8848/nacos/v1/console/health/readiness"]
       interval: 30s
@@ -104,185 +99,10 @@ services:
     volumes:
       - mongo_data:/data/db
     healthcheck:
-      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      test: ["CMD", "mongosh", "-u", "allinone", "-p", "iPasswd1234", "--eval", "db.adminCommand('ping')"]
       interval: 30s
       timeout: 10s
       retries: 3
-
-  api-gateway:
-    build:
-      context: .
-      dockerfile: services/api-gateway/Dockerfile
-    container_name: allinone-api-gateway
-    ports:
-      - "8000:8000"
-    depends_on:
-      - nacos
-      - redis
-    environment:
-      - NACOS_SERVER_ADDRESSES=nacos:8848
-      - NACOS_NAMESPACE=public
-      - NACOS_USERNAME=allinone
-      - NACOS_PASSWORD=iPasswd1234
-      - REDIS_HOST=redis
-      - REDIS_PASSWORD=iPasswd1234
-      - POSTGRES_USER=allinone
-      - POSTGRES_PASSWORD=iPasswd1234
-
-  auth-service:
-    build:
-      context: .
-      dockerfile: services/auth-service/Dockerfile
-    container_name: allinone-auth-service
-    ports:
-      - "8008:8008"
-    depends_on:
-      - nacos
-      - redis
-      - postgres
-    environment:
-      - NACOS_SERVER_ADDRESSES=nacos:8848
-      - NACOS_NAMESPACE=public
-      - NACOS_USERNAME=allinone
-      - NACOS_PASSWORD=iPasswd1234
-      - REDIS_HOST=redis
-      - REDIS_PASSWORD=iPasswd1234
-      - POSTGRES_HOST=postgres
-      - POSTGRES_USER=allinone
-      - POSTGRES_PASSWORD=iPasswd1234
-
-  user-service:
-    build:
-      context: .
-      dockerfile: services/user-service/Dockerfile
-    container_name: allinone-user-service
-    ports:
-      - "8001:8001"
-    depends_on:
-      - postgres
-      - redis
-      - kafka
-    environment:
-      - POSTGRES_HOST=postgres
-      - POSTGRES_USER=allinone
-      - POSTGRES_PASSWORD=iPasswd1234
-      - REDIS_HOST=redis
-      - REDIS_PASSWORD=iPasswd1234
-      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
-
-  news-service:
-    build:
-      context: .
-      dockerfile: services/news-service/Dockerfile
-    container_name: allinone-news-service
-    ports:
-      - "8002:8002"
-    depends_on:
-      - postgres
-      - redis
-      - elasticsearch
-      - mongodb
-    environment:
-      - POSTGRES_HOST=postgres
-      - POSTGRES_USER=allinone
-      - POSTGRES_PASSWORD=iPasswd1234
-      - REDIS_HOST=redis
-      - REDIS_PASSWORD=iPasswd1234
-      - ELASTICSEARCH_URL=http://elasticsearch:9200
-      - ELASTICSEARCH_USER=elastic
-      - ELASTICSEARCH_PASSWORD=iPasswd1234
-      - MONGODB_URI=mongodb://allinone:iPasswd1234@mongodb:27017/
-
-  tools-service:
-    build:
-      context: .
-      dockerfile: services/tools-service/Dockerfile
-    container_name: allinone-tools-service
-    ports:
-      - "8003:8003"
-    depends_on:
-      - postgres
-      - redis
-    environment:
-      - POSTGRES_HOST=postgres
-      - POSTGRES_USER=allinone
-      - POSTGRES_PASSWORD=iPasswd1234
-      - REDIS_HOST=redis
-      - REDIS_PASSWORD=iPasswd1234
-
-  ai-service:
-    build:
-      context: .
-      dockerfile: services/ai-service/Dockerfile
-    container_name: allinone-ai-service
-    ports:
-      - "8004:8004"
-    depends_on:
-      - postgres
-      - redis
-    environment:
-      - POSTGRES_HOST=postgres
-      - POSTGRES_USER=allinone
-      - POSTGRES_PASSWORD=iPasswd1234
-      - REDIS_HOST=redis
-      - REDIS_PASSWORD=iPasswd1234
-
-  stocks-service:
-    build:
-      context: .
-      dockerfile: services/stocks-service/Dockerfile
-    container_name: allinone-stocks-service
-    ports:
-      - "8005:8005"
-    depends_on:
-      - postgres
-      - redis
-    environment:
-      - POSTGRES_HOST=postgres
-      - POSTGRES_USER=allinone
-      - POSTGRES_PASSWORD=iPasswd1234
-      - REDIS_HOST=redis
-      - REDIS_PASSWORD=iPasswd1234
-
-  forum-service:
-    build:
-      context: .
-      dockerfile: services/forum-service/Dockerfile
-    container_name: allinone-forum-service
-    ports:
-      - "8006:8006"
-    depends_on:
-      - postgres
-      - redis
-      - elasticsearch
-      - mongodb
-    environment:
-      - POSTGRES_HOST=postgres
-      - POSTGRES_USER=allinone
-      - POSTGRES_PASSWORD=iPasswd1234
-      - REDIS_HOST=redis
-      - REDIS_PASSWORD=iPasswd1234
-      - ELASTICSEARCH_URL=http://elasticsearch:9200
-      - ELASTICSEARCH_USER=elastic
-      - ELASTICSEARCH_PASSWORD=iPasswd1234
-      - MONGODB_URI=mongodb://allinone:iPasswd1234@mongodb:27017/
-
-  system-service:
-    build:
-      context: .
-      dockerfile: services/system-service/Dockerfile
-    container_name: allinone-system-service
-    ports:
-      - "8007:8007"
-    depends_on:
-      - postgres
-      - redis
-    environment:
-      - POSTGRES_HOST=postgres
-      - POSTGRES_USER=allinone
-      - POSTGRES_PASSWORD=iPasswd1234
-      - REDIS_HOST=redis
-      - REDIS_PASSWORD=iPasswd1234
 
 volumes:
   postgres_data:

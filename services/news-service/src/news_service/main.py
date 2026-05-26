@@ -6,7 +6,7 @@ from common.config_center import ConfigCenter
 from common.database import create_engine, create_session_maker, get_db
 from common.logger import UnifiedLogger, LogConfig, LogLevel
 from common.nacos import NacosServiceRegistry
-from news_service.router import router as news_router
+from src.news_service.router import router as news_router
 
 app = FastAPI(
     title="News Service",
@@ -46,8 +46,7 @@ async def startup():
         await settings.load_from_config_center(config_center)
     
     engine = create_engine(settings.database_url)
-    session_maker = create_session_maker(engine)
-    app.dependency_overrides[get_db] = lambda: get_db(session_maker)
+    create_session_maker(engine)
     
     service_registry = NacosServiceRegistry(
         server_addresses=settings.nacos_server_addresses,

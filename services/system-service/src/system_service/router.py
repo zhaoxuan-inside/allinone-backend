@@ -3,12 +3,12 @@ from typing import List
 from fastapi import APIRouter, Depends
 
 from common.permissions import Roles, require_role
-from system_service.schemas import (
+from src.system_service.schemas import (
     EmailRequest, EmailResponse, EmailTemplateRequest,
     NotificationRequest, NotificationResponse,
     SystemStatusResponse
 )
-from system_service.service import EmailService, NotificationService, SystemStatusService
+from src.system_service.service import EmailService, NotificationService, SystemStatusService
 
 router = APIRouter(prefix="/system", tags=["system"])
 

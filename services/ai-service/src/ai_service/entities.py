@@ -52,15 +52,15 @@ class MessageNode(Base):
     content = Column(Text, nullable=False)
     pinned = Column(Boolean, default=False)
     tags = Column(ARRAY(String), default=[])
-    metadata = Column(JSON)
+    message_metadata = Column(JSON)
     is_summarized = Column(Boolean, default=False)
     summary = Column(Text)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     conversation = relationship("Conversation", back_populates="messages")
-    parent = relationship("MessageNode", remote_side=[id], backref="children")
-    root = relationship("MessageNode", remote_side=[id])
+    parent = relationship("MessageNode", remote_side=[id], backref="children", foreign_keys=[parent_id])
+    root = relationship("MessageNode", remote_side=[id], foreign_keys=[root_id])
 
     def get_ancestors(self):
         ancestors = []

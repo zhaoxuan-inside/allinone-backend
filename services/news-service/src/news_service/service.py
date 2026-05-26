@@ -5,15 +5,15 @@ from uuid import UUID, uuid4
 import asyncio
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from news_service.entities import News, Comment, NewsLike, CommentLike, CrawlerConfig
-from news_service.repository import (
+from src.news_service.entities import News, Comment, NewsLike, CommentLike, CrawlerConfig
+from src.news_service.repository import (
     NewsRepository,
     CommentRepository,
     NewsLikeRepository,
     CommentLikeRepository,
     CrawlerConfigRepository
 )
-from news_service.schemas import (
+from src.news_service.schemas import (
     NewsSummary,
     NewsDetail,
     Comment,

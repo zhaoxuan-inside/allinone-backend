@@ -8,7 +8,7 @@ from common.database import create_engine, create_session_maker, get_db
 from common.logger import UnifiedLogger, LogConfig, LogLevel
 from common.nacos import NacosServiceRegistry
 from common.user_session import init_global_session_manager, UserSessionManager
-from user_service.router import router as user_router
+from src.user_service.router import router as user_router
 
 app = FastAPI(
     title="User Service",
@@ -71,8 +71,7 @@ async def startup():
     session_manager = UserSessionManager(redis_client)
     
     engine = create_engine(settings.database_url)
-    session_maker = create_session_maker(engine)
-    app.dependency_overrides[get_db] = lambda: get_db(session_maker)
+    create_session_maker(engine)
     
     service_registry = NacosServiceRegistry(
         server_addresses=settings.nacos_server_addresses,
@@ -109,6 +108,9 @@ async def shutdown():
 @app.get("/")
 async def root():
     return {"message": "User Service"}
+
+
+app.include_router(user_router)
 
 
 @app.exception_handler(HTTPException)

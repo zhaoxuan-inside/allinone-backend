@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from common.database import get_db
-from stocks_service.schemas import (
+from src.stocks_service.schemas import (
     StockStrategy,
     TradeSignal,
     StrategyPerformance,
@@ -13,7 +13,7 @@ from stocks_service.schemas import (
     StrategyListResponse,
     TradeSignalListResponse
 )
-from stocks_service.service import StocksService
+from src.stocks_service.service import StocksService
 
 router = APIRouter(prefix="/stocks", tags=["stocks"])
 

@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from common.auth import get_current_user
 from common.database import get_db
 from common.permissions import Roles, require_role, require_permission
-from forum_service.schemas import (
+from src.forum_service.schemas import (
     PostSummary,
     PostDetail,
     PostCreate,
@@ -14,7 +14,7 @@ from forum_service.schemas import (
     CommentCreate,
     PostListResponse
 )
-from forum_service.service import ForumService
+from src.forum_service.service import ForumService
 
 router = APIRouter(prefix="/forum", tags=["forum"])
 

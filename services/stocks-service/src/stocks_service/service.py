@@ -4,14 +4,14 @@ from datetime import datetime, timedelta
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from stocks_service.entities import StockStrategy, TradeSignal, StockKLine, StockInfo, StrategyPerformance
-from stocks_service.repository import (
+from src.stocks_service.entities import StockStrategy, TradeSignal, StockKLine, StockInfo, StrategyPerformance
+from src.stocks_service.repository import (
     StrategyRepository,
     TradeSignalRepository,
     StockKLineRepository,
     StockInfoRepository
 )
-from stocks_service.schemas import (
+from src.stocks_service.schemas import (
     StockStrategy as StockStrategySchema,
     TradeSignal as TradeSignalSchema,
     StrategyPerformance as StrategyPerformanceSchema,

@@ -4,7 +4,7 @@ from uuid import UUID
 from sqlalchemy import select, update, delete, desc
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from news_service.entities import News, Comment, NewsLike, CommentLike, CrawlerConfig
+from src.news_service.entities import News, Comment, NewsLike, CommentLike, CrawlerConfig
 
 
 class NewsRepository:

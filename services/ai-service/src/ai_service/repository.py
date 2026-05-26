@@ -5,7 +5,7 @@ from datetime import datetime
 from sqlalchemy import select, update, desc, or_, and_
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from ai_service.entities import AIProvider, Conversation, MessageNode
+from src.ai_service.entities import AIProvider, Conversation, MessageNode
 
 
 class AIProviderRepository:

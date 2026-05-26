@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from common.database import get_db
 from common.permissions import Roles, require_role
-from ai_service.schemas import (
+from src.ai_service.schemas import (
     AIProvider, AIProviderCreate, AIProviderUpdate,
     Conversation, ConversationCreate, ConversationUpdate,
     MessageNode, MessageNodeSchema,
@@ -15,7 +15,7 @@ from ai_service.schemas import (
     ProviderListResponse, ConversationListResponse,
     PinRequest, TagRequest, SummarizeRequest
 )
-from ai_service.service import AIService
+from src.ai_service.service import AIService
 
 router = APIRouter(prefix="/ai", tags=["ai"])
 

@@ -4,7 +4,7 @@ from uuid import UUID
 from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from user_service.entities import User, UserRole, UserPermission
+from src.user_service.entities import User, UserRole, UserPermission
 
 
 class UserRepository:

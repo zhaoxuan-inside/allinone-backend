@@ -5,7 +5,7 @@ from typing import List, Optional
 from datetime import datetime
 
 from common.settings import get_settings
-from system_service.schemas import (
+from src.system_service.schemas import (
     EmailRequest, EmailResponse, EmailTemplateRequest,
     NotificationRequest, NotificationResponse,
     SystemStatusResponse

@@ -5,14 +5,14 @@ from uuid import UUID, uuid4
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from forum_service.entities import Post, Comment, PostLike, CommentLike
-from forum_service.repository import (
+from src.forum_service.entities import Post, Comment, PostLike, CommentLike
+from src.forum_service.repository import (
     PostRepository,
     CommentRepository,
     PostLikeRepository,
     CommentLikeRepository
 )
-from forum_service.schemas import (
+from src.forum_service.schemas import (
     PostSummary,
     PostDetail,
     PostCreate,

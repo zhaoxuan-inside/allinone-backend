@@ -1,8 +1,8 @@
 from fastapi import APIRouter, HTTPException, Header
 from typing import Optional
 
-from auth_service.service import AuthService
-from auth_service.schemas import (
+from src.auth_service.service import AuthService
+from src.auth_service.schemas import (
     CaptchaResponse,
     LoginRequest,
     LoginResponse,

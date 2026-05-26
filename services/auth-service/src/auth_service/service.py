@@ -14,7 +14,7 @@ from common.auth import JWTAuthProvider
 from common.crypto_utils import md5_hash
 from common.logger import UnifiedLogger
 
-from auth_service.schemas import (
+from src.auth_service.schemas import (
     CaptchaResponse,
     LoginResponse,
     RegisterResponse,

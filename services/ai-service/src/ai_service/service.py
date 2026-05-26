@@ -6,9 +6,9 @@ import json
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from ai_service.entities import AIProvider, Conversation, MessageNode
-from ai_service.repository import AIProviderRepository, ConversationRepository, MessageNodeRepository
-from ai_service.schemas import (
+from src.ai_service.entities import AIProvider, Conversation, MessageNode
+from src.ai_service.repository import AIProviderRepository, ConversationRepository, MessageNodeRepository
+from src.ai_service.schemas import (
     AIProvider as AIProviderSchema,
     AIProviderCreate, AIProviderUpdate,
     Conversation as ConversationSchema,

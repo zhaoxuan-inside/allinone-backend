@@ -53,7 +53,7 @@ class MessageNodeBase(BaseModel):
     root_id: Optional[UUID] = None
     pinned: bool = False
     tags: List[str] = []
-    metadata: Optional[Dict[str, Any]] = None
+    message_metadata: Optional[Dict[str, Any]] = None
 
 
 class MessageNodeCreate(MessageNodeBase):
@@ -72,6 +72,9 @@ class MessageNode(MessageNodeBase):
 
     class Config:
         from_attributes = True
+
+
+MessageNodeSchema = MessageNode
 
 
 class MessageNodeWithChildren(MessageNode):
