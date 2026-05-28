@@ -4,6 +4,7 @@ services:
       context: .
       dockerfile: services/api-gateway/Dockerfile
     container_name: allinone-api-gateway
+    restart: always
     ports:
       - "8000:8000"
     depends_on:
@@ -23,6 +24,7 @@ services:
       context: .
       dockerfile: services/auth-service/Dockerfile
     container_name: allinone-auth-service
+    restart: always
     ports:
       - "8008:8008"
     depends_on:
@@ -46,6 +48,7 @@ services:
       context: .
       dockerfile: services/user-service/Dockerfile
     container_name: allinone-user-service
+    restart: always
     ports:
       - "8001:8001"
     depends_on:
@@ -71,6 +74,7 @@ services:
       context: .
       dockerfile: services/news-service/Dockerfile
     container_name: allinone-news-service
+    restart: always
     ports:
       - "8002:8002"
     depends_on:
@@ -100,6 +104,7 @@ services:
       context: .
       dockerfile: services/tools-service/Dockerfile
     container_name: allinone-tools-service
+    restart: always
     ports:
       - "8003:8003"
     depends_on:
@@ -123,6 +128,7 @@ services:
       context: .
       dockerfile: services/ai-service/Dockerfile
     container_name: allinone-ai-service
+    restart: always
     ports:
       - "8004:8004"
     depends_on:
@@ -146,6 +152,7 @@ services:
       context: .
       dockerfile: services/stocks-service/Dockerfile
     container_name: allinone-stocks-service
+    restart: always
     ports:
       - "8005:8005"
     depends_on:
@@ -169,6 +176,7 @@ services:
       context: .
       dockerfile: services/forum-service/Dockerfile
     container_name: allinone-forum-service
+    restart: always
     ports:
       - "8006:8006"
     depends_on:
@@ -198,6 +206,7 @@ services:
       context: .
       dockerfile: services/system-service/Dockerfile
     container_name: allinone-system-service
+    restart: always
     ports:
       - "8007:8007"
     depends_on:
